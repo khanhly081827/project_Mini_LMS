@@ -1,15 +1,30 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import StatusBadge from './StatusBadge';
 
 export default function Navbar() {
   const { user, isAuthenticated, isInstructor, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = () => {
     logout();
     navigate('/login');
+  };
+
+  const getLinkStyle = (path) => {
+    const isActive = location.pathname === path || location.pathname.startsWith(`${path}/`);
+    return {
+      color: isActive ? '#2563eb' : '#475569',
+      backgroundColor: isActive ? '#eff6ff' : 'transparent',
+      textDecoration: 'none',
+      fontSize: '14px',
+      fontWeight: isActive ? '600' : '500',
+      padding: '6px 12px',
+      borderRadius: '6px',
+      transition: 'all 0.15s ease'
+    };
   };
 
   return (
@@ -24,7 +39,7 @@ export default function Navbar() {
       position: 'sticky',
       top: 0,
       zIndex: 100,
-      boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+      boxShadow: '0 1px 3px rgba(0,0,0,0.04)'
     }}>
       {/* Logo & Brand */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
@@ -37,22 +52,22 @@ export default function Navbar() {
 
         {/* Navigation Menu theo Vai trò */}
         {isAuthenticated && (
-          <div style={{ display: 'flex', gap: '16px', marginLeft: '12px' }}>
+          <div style={{ display: 'flex', gap: '8px', marginLeft: '12px' }}>
             {isInstructor ? (
               <>
-                <Link to="/instructor/courses" style={{ color: '#475569', textDecoration: 'none', fontSize: '14px', fontWeight: '500' }}>
+                <Link to="/instructor/courses" style={getLinkStyle('/instructor/courses')}>
                   Quản lý Khóa học
                 </Link>
-                <Link to="/instructor/grading" style={{ color: '#475569', textDecoration: 'none', fontSize: '14px', fontWeight: '500' }}>
+                <Link to="/instructor/grading" style={getLinkStyle('/instructor/grading')}>
                   Chấm điểm & Bài tập
                 </Link>
               </>
             ) : (
               <>
-                <Link to="/student/courses" style={{ color: '#475569', textDecoration: 'none', fontSize: '14px', fontWeight: '500' }}>
+                <Link to="/student/courses" style={getLinkStyle('/student/courses')}>
                   Khóa học của tôi
                 </Link>
-                <Link to="/student/explore" style={{ color: '#475569', textDecoration: 'none', fontSize: '14px', fontWeight: '500' }}>
+                <Link to="/student/explore" style={getLinkStyle('/student/explore')}>
                   Khám phá Khóa học
                 </Link>
               </>

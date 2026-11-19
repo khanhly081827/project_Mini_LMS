@@ -6,7 +6,11 @@ import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 import Login from './features/auth/Login';
 import InstructorCourses from './features/courses/InstructorCourses';
+import CourseDetailManager from './features/courses/CourseDetailManager';
+import InstructorGrading from './features/assignments/InstructorGrading';
 import StudentCourses from './features/courses/StudentCourses';
+import StudentCourseStudy from './features/lessons/StudentCourseStudy';
+import ExploreCourses from './features/courses/ExploreCourses';
 import './App.css';
 
 // Component điều hướng trang chủ dựa trên trạng thái đăng nhập và vai trò
@@ -60,7 +64,13 @@ export default function App() {
               <ProtectedRoute allowedRoles={['INSTRUCTOR']}>
                 <MainLayout>
                   <Routes>
+                    {/* UI02: Quản lý danh sách khóa học */}
                     <Route path="courses" element={<InstructorCourses />} />
+                    {/* UI03: Quản lý chi tiết bài giảng, chương mục, giao bài tập */}
+                    <Route path="courses/:courseId" element={<CourseDetailManager />} />
+                    {/* UI08: Quản lý chấm điểm & bài nộp */}
+                    <Route path="grading" element={<InstructorGrading />} />
+                    {/* Fallback Giảng viên */}
                     <Route path="*" element={<Navigate to="/instructor/courses" replace />} />
                   </Routes>
                 </MainLayout>
@@ -75,7 +85,13 @@ export default function App() {
               <ProtectedRoute allowedRoles={['STUDENT']}>
                 <MainLayout>
                   <Routes>
+                    {/* UI04: Khóa học đã đăng ký */}
                     <Route path="courses" element={<StudentCourses />} />
+                    {/* UI05 & UI06: Xem bài giảng, học trực tuyến & nộp bài tập */}
+                    <Route path="courses/:courseId" element={<StudentCourseStudy />} />
+                    {/* UI04: Khám phá & tìm kiếm khóa học để đăng ký */}
+                    <Route path="explore" element={<ExploreCourses />} />
+                    {/* Fallback Sinh viên */}
                     <Route path="*" element={<Navigate to="/student/courses" replace />} />
                   </Routes>
                 </MainLayout>
